@@ -43,15 +43,6 @@ public class SingleColumnParserTest {
     }
 
     @Test
-    public void testParse_givenInaccessibleFileThenThrowSecurityException() throws IOException {
-        // assertThrows(SecurityException.class, () ->
-        //     this.singleColumnParser.parse(
-        //         FileUtil.generateTestFilePath("/invalid-security-exception.txt"))
-        // );
-        // TODO: Find a way to test a file not readable cross platform (Windows and Linux)
-    }
-
-    @Test
     public void testParse_givenValidFileThenReturnCorrectInputFileData() {
         InputFileData inputFileData = this.singleColumnParser.parse(
             FileUtil.generateTestFilePath("/default-test-file.txt")

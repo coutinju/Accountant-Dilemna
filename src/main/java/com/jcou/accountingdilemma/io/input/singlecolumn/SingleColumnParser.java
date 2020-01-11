@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
  * -The remaining numbers represent the 'Due Payment's
  * -Each number has exactly 2 decimals
  */
-public class SingleColumnParser implements InputFileParser {
+public class SingleColumnParser extends InputFileParser {
     private static final Logger logger = Logger.getLogger(SingleColumnParser.class);
 
     /**
@@ -67,8 +67,6 @@ public class SingleColumnParser implements InputFileParser {
             throw new RuntimeException("Input file cannot be opened: " + filePath);
         } catch (NumberFormatException e) {
             throw new NumberFormatException("Invalid input file content: " + filePath);
-        } catch (SecurityException e) {
-            throw new SecurityException("Unexpected error, please contact the support");
         }
 
         logger.debug("Number of amounts found: " + amountsList.size());

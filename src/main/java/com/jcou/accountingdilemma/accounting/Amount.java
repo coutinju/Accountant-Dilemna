@@ -15,6 +15,17 @@ private static final int HALF_UP_SCALING = 2;
         this.amount = amount.setScale(HALF_UP_SCALING, RoundingMode.HALF_UP);
     }
 
+    /**
+     * Function used to validate an Amount when it should be valid
+     * Something unexpected happened and needs to be fixed if the error is thrown
+     * @throws IllegalArgumentException if the amount is null
+     */
+    public void validate() {
+        if (this.amount == null) {
+            throw new IllegalArgumentException("Amount must not be null");
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

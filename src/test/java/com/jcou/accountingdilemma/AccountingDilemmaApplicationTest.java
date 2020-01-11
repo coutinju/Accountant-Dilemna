@@ -1,7 +1,5 @@
 package com.jcou.accountingdilemma;
 
-import java.io.File;
-import java.net.URL;
 import java.security.Permission;
 
 import com.jcou.accountingdilemma.util.FileUtil;
@@ -38,7 +36,7 @@ public class AccountingDilemmaApplicationTest {
      public void testMain_givenTooMuchArgumentsThenThrowIllegalArgumentException() {
           try {
                AccountingDilemmaApplication.main(new String[]{"Too","Much","Arguments"});
-          } catch(ExitException e) {
+          } catch (ExitException e) {
                assertEquals(1, e.status);
           }
      }
@@ -47,7 +45,7 @@ public class AccountingDilemmaApplicationTest {
      public void testMain_givenNoArgumentsThenThrowIllegalArgumentException() {
           try {
                AccountingDilemmaApplication.main(new String[]{});
-          } catch(ExitException e) {
+          } catch (ExitException e) {
                assertEquals(1, e.status);
           }
      }

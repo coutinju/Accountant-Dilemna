@@ -25,9 +25,9 @@ public class AccountingDilemmaApplication {
     public static void main(String[] args) {
         try {
             logger.info("Accounting Dilemma Application started");
-            findSolution(args);
+            solveAccountingDilemma(args);
             logger.info("Accounting Dilemma Application ended normally");
-        } catch(Exception e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
             logger.info("Accounting Dilemma Application ended unexpectedly");
             System.exit(1);
@@ -40,7 +40,7 @@ public class AccountingDilemmaApplication {
      * Find a solution
      * Generate an output file containing the solution
      */
-    private static void findSolution(String[] args) {
+    private static void solveAccountingDilemma(String[] args) {
         ArgumentsResolver argumentResolver = new SingleColumnArgumentsResolver();
         String filePath = argumentResolver.retrieveInputFilePath(args);
         InputFileParser inputFileParser = new SingleColumnParser();

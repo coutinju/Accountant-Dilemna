@@ -16,7 +16,9 @@ public class InputFileData {
 
     public InputFileData(BankTransfer bankTransfer, List<DuePayment> duePaymentsList) {
         this.bankTransfer = bankTransfer.clone();
-        this.duePaymentsList = duePaymentsList.stream().map(DuePayment::clone).collect(Collectors.toList());
+        this.duePaymentsList = duePaymentsList.stream()
+            .map(DuePayment::clone)
+            .collect(Collectors.toList());
     }
 
     public BankTransfer getBankTransfer() {
@@ -24,7 +26,29 @@ public class InputFileData {
     }
 
     public List<DuePayment> getDuePaymentsList() {
-        return this.duePaymentsList.stream().map(DuePayment::clone).collect(Collectors.toList());
+        return this.duePaymentsList.stream().map(DuePayment::clone)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Function used to validate an InputFileData when it should be valid
+     * Something unexpected happened and needs to be fixed if the error is thrown
+     * @throws IllegalArgumentException if the Bank Transfer is not valid 
+     *                                  or if the list of Due Payments is not valid
+     */
+    public void validate() {
+        BankTransfer bankTransfer = this.getBankTransfer();
+        if (bankTransfer == null) {
+            throw new IllegalArgumentException("Bank transfer must not be null");
+        } else {
+            bankTransfer.validate();
+        }
+        List<DuePayment> duePaymentsList = this.getDuePaymentsList();
+        if (duePaymentsList == null) {
+            throw new IllegalArgumentException("Due Payments List must not be null");
+        } else {
+            duePaymentsList.stream().forEach(DuePayment::validate);
+        }
     }
 
     @Override
