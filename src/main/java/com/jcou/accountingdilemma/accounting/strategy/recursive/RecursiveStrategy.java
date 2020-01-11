@@ -12,6 +12,8 @@ import com.jcou.accountingdilemma.accounting.Solution;
 import com.jcou.accountingdilemma.accounting.strategy.Strategy;
 import com.jcou.accountingdilemma.io.input.InputFileData;
 
+import org.apache.log4j.Logger;
+
 /**
  *  Idea of the algorithm:
  * 
@@ -69,18 +71,29 @@ import com.jcou.accountingdilemma.io.input.InputFileData;
  *      
  */
 public class RecursiveStrategy implements Strategy {
+    private static final Logger logger = 
+        Logger.getLogger(RecursiveStrategy.class);
+
     /**
      * Find the list of DuePayments which correspond to the BankTransfer
      * @param inputFileData InputFileData
      * @return the solution if one is found, null otherwise
      */
     public Solution findSolution(InputFileData inputFileData) {
+        logger.debug("Finding a solution");
         validateInputFileData(inputFileData);
 
         BigDecimal bankTransferAmount = inputFileData.getBankTransfer().getAmount();
         List<DuePayment> duePaymentsList = inputFileData.getDuePaymentsList();
 
-        return this.explorePossibilities(bankTransferAmount, duePaymentsList);
+        Solution solution = this.explorePossibilities(bankTransferAmount, duePaymentsList);
+        if (solution == null) {
+            logger.debug("Solution search ended without result");
+        } else {
+            logger.debug("Solution search ended with a result");
+        }
+
+        return solution;
     }
 
     /**

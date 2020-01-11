@@ -1,11 +1,14 @@
 package com.jcou.accountingdilemma;
 
+import com.jcou.accountingdilemma.accounting.Solution;
+import com.jcou.accountingdilemma.accounting.strategy.recursive.RecursiveStrategy;
 import com.jcou.accountingdilemma.io.input.ArgumentsResolver;
 import com.jcou.accountingdilemma.io.input.InputFileData;
-import com.jcou.accountingdilemma.io.input.InputFileParser;
 import com.jcou.accountingdilemma.io.input.singlecolumn.SingleColumnArgumentsResolver;
 import com.jcou.accountingdilemma.io.input.singlecolumn.SingleColumnParser;
+import com.jcou.accountingdilemma.io.output.inline.InlineGenerator;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -15,7 +18,6 @@ import org.apache.log4j.Logger;
 public class AccountingDilemmaApplication {
     private static final Logger logger = 
         Logger.getLogger(AccountingDilemmaApplication.class);
-
     /**
      * Method called when the application is run
      * Expect as unique argument: file input path
@@ -29,6 +31,9 @@ public class AccountingDilemmaApplication {
             logger.info("Accounting Dilemma Application ended normally");
         } catch (Exception e) {
             logger.error(e.getMessage());
+            if (Logger.getRootLogger().getLevel().isGreaterOrEqual(Level.ERROR)) {
+                e.printStackTrace();
+            }
             logger.info("Accounting Dilemma Application ended unexpectedly");
             System.exit(1);
         }
@@ -43,7 +48,8 @@ public class AccountingDilemmaApplication {
     private static void solveAccountingDilemma(String[] args) {
         ArgumentsResolver argumentResolver = new SingleColumnArgumentsResolver();
         String filePath = argumentResolver.retrieveInputFilePath(args);
-        InputFileParser inputFileParser = new SingleColumnParser();
-        InputFileData inputFileData = inputFileParser.parse(filePath);
+        InputFileData inputFileData = new SingleColumnParser().parse(filePath);
+        Solution solution = new RecursiveStrategy().findSolution(inputFileData);
+        new InlineGenerator().generateFile(solution);
     }
 }

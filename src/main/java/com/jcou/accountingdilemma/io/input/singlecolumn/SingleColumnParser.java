@@ -62,11 +62,11 @@ public class SingleColumnParser extends InputFileParser {
                 .collect(Collectors.toList());
 
 		} catch (InvalidPathException e) {
-            throw new InvalidPathException(filePath, "Invalid file path");
+            throw new RuntimeException("Invalid file path: " + filePath, e);
         } catch (IOException e) {
-            throw new RuntimeException("Input file cannot be opened: " + filePath);
+            throw new RuntimeException("Input file cannot be opened: " + filePath, e);
         } catch (NumberFormatException e) {
-            throw new NumberFormatException("Invalid input file content: " + filePath);
+            throw new RuntimeException("Invalid input file content: " + filePath, e);
         }
 
         logger.debug("Number of amounts found: " + amountsList.size());

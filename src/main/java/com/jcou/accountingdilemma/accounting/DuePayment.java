@@ -29,4 +29,9 @@ public class DuePayment extends Amount implements Cloneable {
     public DuePayment clone() {
         return new DuePayment(this.amount);
     }
+
+    @Override
+    public String toString() {
+        return this.amount.toString();
+    }
 }

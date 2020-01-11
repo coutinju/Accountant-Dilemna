@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
@@ -27,18 +26,20 @@ public class SingleColumnParserTest {
     }
 
     @Test
-    public void testParse_givenNullThenThrowIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> this.singleColumnParser.parse(null));
+    public void testParse_givenNullThenThrowRuntimeException() {
+        assertThrows(RuntimeException.class, () -> 
+            this.singleColumnParser.parse(null));
     }
 
     @Test
-    public void testParse_givenInvalidPathThenThrowInvalidPathException() {
-        assertThrows(RuntimeException.class, () -> this.singleColumnParser.parse("INVALID:\\"));
+    public void testParse_givenInvalidPathThenThrowRuntimeException() {
+        assertThrows(RuntimeException.class, () -> 
+            this.singleColumnParser.parse("INVALID:\\"));
     }
 
     @Test
-    public void testParse_givenInvalidContentFileThenThrowNumberFormatException() {
-        assertThrows(NumberFormatException.class, () -> this.singleColumnParser
+    public void testParse_givenInvalidContentFileThenThrowRuntimeException() {
+        assertThrows(RuntimeException.class, () -> this.singleColumnParser
                 .parse(FileUtil.generateTestFilePath("/invalid-number-format-exception.txt")));
     }
 

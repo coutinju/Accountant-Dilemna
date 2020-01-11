@@ -25,7 +25,7 @@ public class RecursiveStrategyTest {
     }
 
     @Test
-    public void testFindSolution_givenNullThenThrowIllegalArgumentException() {
+    public void testFindSolution_givenNullThenThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () ->
             this.recursiveStrategy.findSolution(null)
         );
@@ -38,6 +38,21 @@ public class RecursiveStrategyTest {
                 new BankTransfer(new BigDecimal("2")), 
                 Arrays.asList(
                     new DuePayment(new BigDecimal("1"))
+                )
+            );
+
+        Solution solution = this.recursiveStrategy.findSolution(inputFileData);
+
+        assertNull(solution);
+    }
+
+    @Test
+    public void testFindSolution_givenEmptyDuePaymentsThenReturnsReturnsNull() {
+        InputFileData inputFileData = 
+            new InputFileData(
+                new BankTransfer(new BigDecimal("2")), 
+                Arrays.asList(
+                    // Missing DuePayments
                 )
             );
 
@@ -120,6 +135,26 @@ public class RecursiveStrategyTest {
                     new DuePayment(new BigDecimal("2")),
                     new DuePayment(new BigDecimal("2")),
                     new DuePayment(new BigDecimal("1"))
+                )
+            );
+
+        Solution solution = this.recursiveStrategy.findSolution(inputFileData);
+
+        this.validateSolution(solution, inputFileData);
+    }
+
+    @Test
+    public void testFindSolution_givenDefaultTestFileThenReturnSolution() {
+        InputFileData inputFileData = 
+            new InputFileData(
+                new BankTransfer(new BigDecimal("74.06")), 
+                Arrays.asList(
+                    new DuePayment(new BigDecimal("22.75")),
+                    new DuePayment(new BigDecimal("59.33")),
+                    new DuePayment(new BigDecimal("34.22")),
+                    new DuePayment(new BigDecimal("27.21")),
+                    new DuePayment(new BigDecimal("17.09")),
+                    new DuePayment(new BigDecimal("100.99"))
                 )
             );
 
