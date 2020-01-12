@@ -18,13 +18,16 @@ import org.apache.log4j.Logger;
  *  Idea of the algorithm:
  * 
  *  Recursive function: args = BankTransferAmount, DuePayments list, DuePayments Sum list
- *  Clone DuePayments list (function DuePayments clone)
+ *  Checking if there are only positive values
+ *  Sorting the list with ascending order
  *  Parse DuePayments list
  *      Remove the current DuePayment from the function DuePayments clone
  *      Clone DuePayments Sum list
  *      Add the current DuePayment to the loop DuePayments Sum clone
  *      Check if the loop DuePayments Sum clone is a solution
  *          Yes -> return the solution
+*           No -> check if the list contains only positive value and the sum > bank transfer
+                Yes -> Continue to next loop
  *      Continue to explore the tree of possibilities (deep-first search)
  *          Using the function DuePayments clone and the loop DuePayments Sum clone
  *      Check if a solution has been returned from the deep-first search
@@ -32,7 +35,7 @@ import org.apache.log4j.Logger;
  * 
  * ============================================================================
  * 
- * Flat example with the following arguments:
+ * Flat example with the following arguments (for any values even negatives):
  * -BankTransfer impossible to find
  * -DuePayments list: [A, B]
  *  
@@ -73,6 +76,8 @@ import org.apache.log4j.Logger;
 public class RecursiveStrategy implements Strategy {
     private static final Logger logger = 
         Logger.getLogger(RecursiveStrategy.class);
+    
+    private boolean onlyPositiveValues = false;
 
     /**
      * Find the list of DuePayments which correspond to the BankTransfer
@@ -85,6 +90,16 @@ public class RecursiveStrategy implements Strategy {
 
         BigDecimal bankTransferAmount = inputFileData.getBankTransfer().getAmount();
         List<DuePayment> duePaymentsList = inputFileData.getDuePaymentsList();
+
+        onlyPositiveValues = duePaymentsList.stream()
+                .allMatch(duePayment -> duePayment.getAmount().compareTo(BigDecimal.ZERO) >= 0)
+            && bankTransferAmount.compareTo(BigDecimal.ZERO) > 0;
+        
+        // Ordering the list in case there are only positive values (Ascending)
+        // Also Summing big values first may not be the best idea to find the answer quickly
+        duePaymentsList = duePaymentsList.stream()
+            .sorted((dp1, dp2) -> dp1.getAmount().compareTo(dp2.getAmount()))
+            .collect(Collectors.toList());
 
         Solution solution = this.explorePossibilities(bankTransferAmount, duePaymentsList);
         if (solution == null) {
@@ -132,8 +147,13 @@ public class RecursiveStrategy implements Strategy {
             // Adding the current DuePayment to the loop DuePaymentsList Sum clone
             nextDuePaymentsSumList.add(duePayment);
             // Checking if a solution was found
-            if (isSolutionFound(bankTransferAmount, duePaymentsSum(nextDuePaymentsSumList))) {
+            BigDecimal duePaymentsSum = duePaymentsSum(nextDuePaymentsSumList);
+            if (isSolutionFound(bankTransferAmount, duePaymentsSum)) {
                 return new Solution(nextDuePaymentsSumList);
+            } else if (this.onlyPositiveValues && 
+                    duePaymentsSum.compareTo(bankTransferAmount) > 0) {
+                // if the list contains only positive values there is no need to go deeper
+                continue;
             }
 
             // Deep-first search to find the solution
