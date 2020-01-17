@@ -21,3 +21,7 @@ accountingdilemma/target> java -jar accountingdilemma-1.0-SNAPSHOT.jar input.txt
 ```
 
 The solution will be generated in the 'output.txt' file.
+
+# Instructions
+
+Please refer to the file 'Accountant Dilemna WSS Java Technical Test.pdf'.
